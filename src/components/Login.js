@@ -15,19 +15,29 @@ class Login extends Component {
   state = { showProgress: false };
 
   onLoginPress() {
-    this.setState({ showProgress: true, username: '', password: '' });
+    this.setState({
+      showProgress: true,
+      username: '',
+      password: '',
+      badCredentials: '',
+      unknownError: ''
+    });
 
     AuthService.login({
       username: this.state.username,
       password: this.state.password
     }, (results) => {
       this.setState({ ...results, showProgress: false });
+
+      if (results.success && this.props.onLogin) {
+        this.props.onLogin();
+      }
     });
   }
 
   renderProgress() {
     return !this.state.showProgress ? null :
-      (<ActivityIndicator size="large" style={styles.loader} />);
+    (<ActivityIndicator size="large" style={styles.loader} />);
   }
 
   renderError() {
