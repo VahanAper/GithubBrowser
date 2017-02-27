@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
   StyleSheet
 } from 'react-native';
-import { Buffer } from 'buffer';
+import AuthService from '../services/AuthService';
 import logo from '../images/octocat.png';
 
 class Login extends Component {
@@ -17,49 +17,17 @@ class Login extends Component {
   onLoginPress() {
     this.setState({ showProgress: true, username: '', password: '' });
 
-    const userPass = Buffer(`${this.state.username}:${this.state.password}`);
-    const encodedAuth = userPass.toString('base64');
-
-    window.fetch('https://api.github.com/user', {
-      headers: {
-        'Authorization': `Basic ${encodedAuth}`
-      }
-    })
-    .then((response) => {
-      if (response.status >= 200 && response.status < 300) {
-        return response;
-      }
-      throw {
-        badCredentials: response.status === 401,
-        unknownError: response.status !== 401
-      };
-    })
-    .then((response) => {
-      return response.json();
-    })
-    .then((result) => {
-      console.log(result);
-      this.setState({ success: true });
-    })
-    .catch((error) => {
-      console.log(error);
-      this.setState(error);
-    })
-    .finally(() => {
-      this.setState({ showProgress: false });
-      console.log(this.state);
+    AuthService.login({
+      username: this.state.username,
+      password: this.state.password
+    }, (results) => {
+      this.setState({ ...results, showProgress: false });
     });
   }
 
   renderProgress() {
-    return !this.state.showProgress
-      ? null
-      : (
-          <ActivityIndicator
-            size="large"
-            style={styles.loader}
-          />
-        );
+    return !this.state.showProgress ? null :
+      (<ActivityIndicator size="large" style={styles.loader} />);
   }
 
   renderError() {
