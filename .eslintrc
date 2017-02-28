@@ -9,7 +9,10 @@
         "unnecessary": false
       }
     ],
-    "no-throw-literal": 0
+    "no-throw-literal": 0,
+    "no-underscore-dangle": [
+      "error", { "allowAfterThis": true }
+    ]
   },
   "env": {
     "node": true,

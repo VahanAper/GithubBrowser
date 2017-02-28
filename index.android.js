@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { AppRegistry, View, Text, ActivityIndicator } from 'react-native';
+import { AppRegistry, View, ActivityIndicator } from 'react-native';
 import Login from './src/components/Login';
+import AppContainer from './src/components/AppContainer';
 import AuthService from './src/services/AuthService';
 
 class GithubBrowser extends Component {
@@ -35,9 +36,7 @@ class GithubBrowser extends Component {
 
     if (this.state.isLoggedIn) {
       return (
-        <View>
-          <Text>Welcome!!!</Text>
-        </View>
+        <AppContainer />
       );
     }
 
