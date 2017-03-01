@@ -10,6 +10,7 @@ import {
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import icon from '../images/octocat.png';
 import FacebookTabBar from './FacebookTabBar';
+import Feed from './Feed';
 
 class AppContainer extends Component {
   state = { selectedTab: 'feed' };
@@ -24,7 +25,7 @@ class AppContainer extends Component {
             icon={icon}
             onPress={() => this.setState({ selectedTab: 'feed' })}
           >
-            <Text style={styles.welcome}>Tab 1(ios)</Text>
+            <Feed />
           </TabBarIOS.Item>
 
           <TabBarIOS.Item
@@ -44,11 +45,16 @@ class AppContainer extends Component {
         style={{ marginTop: 20 }}
         initialPage={0}
         tabBarPosition="bottom"
-        renderTabBar={() => <FacebookTabBar testProps={[1, 2, 3]} />}
+        renderTabBar={() => <FacebookTabBar />}
       >
-        <ScrollView tabLabel="ios-paper" style={styles.tabView}>
-          <View style={styles.card}>
-            <Text>Tab 1(android)</Text>
+        <ScrollView tabLabel="ios-paper">
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center'
+            }}
+          >
+            <Feed />
           </View>
         </ScrollView>
         <ScrollView tabLabel="ios-search" style={styles.tabView}>

@@ -32,6 +32,8 @@ class AuthService {
         user: JSON.parse(zippedObj[USER_KEY])
       };
 
+      // console.log(authInfo.user);
+
       return callback(null, authInfo);
     });
   }
