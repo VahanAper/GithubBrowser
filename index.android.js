@@ -9,7 +9,6 @@ class GithubBrowser extends Component {
 
   componentDidMount() {
     AuthService.getAuthInfo((err, authInfo) => {
-      // console.log('authInfo', authInfo);
       this.setState({
         checkingAuth: false,
         isLoggedIn: authInfo != null
@@ -25,8 +24,9 @@ class GithubBrowser extends Component {
     if (this.state.checkingAuth) {
       const animating = true;
       return (
-        <View>
+        <View style={{ flex: 1 }}>
           <ActivityIndicator
+            style={{ justifyContent: 'center', alignSelf: 'center' }}
             animating={animating}
             size="large"
           />

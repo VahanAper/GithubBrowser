@@ -5,15 +5,28 @@ import {
   StyleSheet,
   ScrollView,
   TabBarIOS,
-  Platform
+  Platform,
+  Navigator,
+  TouchableOpacity
 } from 'react-native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
+import Icon from 'react-native-vector-icons/Ionicons';
 import icon from '../images/octocat.png';
 import FacebookTabBar from './FacebookTabBar';
 import Feed from './Feed';
+import PushPayload from './PushPayload';
 
 class AppContainer extends Component {
   state = { selectedTab: 'feed' };
+
+  renderScene(route, navigator) {
+     if (route.title === 'Feed') {
+       return <Feed navigator={navigator} />;
+     }
+     if (route.title === 'Push Event') {
+       return <PushPayload navigator={navigator} {...route.passProps} />;
+     }
+  }
 
   render() {
     if (Platform.OS === 'ios') {
@@ -25,7 +38,13 @@ class AppContainer extends Component {
             icon={icon}
             onPress={() => this.setState({ selectedTab: 'feed' })}
           >
-            <Feed />
+            <Navigator
+              style={{ flex: 1 }}
+              initialRoute={{
+                component: Feed,
+                title: 'Feed'
+              }}
+            />
           </TabBarIOS.Item>
 
           <TabBarIOS.Item
@@ -42,21 +61,72 @@ class AppContainer extends Component {
 
     return (
       <ScrollableTabView
-        style={{ marginTop: 20 }}
+        style={{ flex: 1 }}
         initialPage={0}
         tabBarPosition="bottom"
         renderTabBar={() => <FacebookTabBar />}
       >
-        <ScrollView tabLabel="ios-paper">
-          <View
-            style={{
-              flex: 1,
-              alignItems: 'center'
-            }}
-          >
-            <Feed />
-          </View>
-        </ScrollView>
+        <Navigator
+          tabLabel="ios-paper"
+          style={{ flex: 1 }}
+          initialRoute={{ title: 'Feed', index: 0 }}
+          renderScene={this.renderScene}
+          navigationBar={
+            <Navigator.NavigationBar
+              style={{
+                backgroundColor: '#FFFFFF',
+                flex: 1,
+                flexDirection: 'row'
+              }}
+              routeMapper={{
+                LeftButton: (route, navigator) => {
+                  if (route.index === 0) {
+                    return null;
+                  }
+                  if (route.index === 1) {
+                    return (
+                      <TouchableOpacity
+                        style={{
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          flex: 1,
+                          marginLeft: 10
+                        }}
+                        onPress={() => navigator.pop()}
+                      >
+                        <Icon name="ios-arrow-back" size={30} color="rgb(59,89,152)" />
+                      </TouchableOpacity>
+                    );
+                  }
+                },
+                RightButton: () => {},
+                Title: (route) => {
+                  return (
+                    <View
+                      style={{
+                        flex: 3,
+                        justifyContent: 'center',
+                        alignSelf: 'center',
+                        marginLeft: -60
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 20,
+                          fontWeight: '900',
+                          color: 'rgb(59,89,152)'
+                        }}
+                      >
+                        {route.title}
+                      </Text>
+                    </View>
+                  );
+                },
+              }}
+            />
+          }
+        />
+
         <ScrollView tabLabel="ios-search" style={styles.tabView}>
           <View style={styles.card}>
             <Text>Tab 2(android)</Text>
