@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
   TabBarIOS,
   Platform,
   Navigator,
@@ -15,6 +14,7 @@ import icon from '../images/octocat.png';
 import FacebookTabBar from './FacebookTabBar';
 import Feed from './Feed';
 import PushPayload from './PushPayload';
+import Search from './Search';
 
 class AppContainer extends Component {
   state = { selectedTab: 'feed' };
@@ -25,6 +25,9 @@ class AppContainer extends Component {
      }
      if (route.title === 'Push Event') {
        return <PushPayload navigator={navigator} {...route.passProps} />;
+     }
+     if (route.title === 'Search') {
+       return <Search navigator={navigator} />;
      }
   }
 
@@ -53,7 +56,13 @@ class AppContainer extends Component {
             icon={icon}
             onPress={() => this.setState({ selectedTab: 'search' })}
           >
-            <Text style={styles.welcome}>Tab 2(ios)</Text>
+            <Navigator
+              style={{ flex: 1 }}
+              initialRoute={{
+                component: Search,
+                title: 'Search'
+              }}
+            />
           </TabBarIOS.Item>
         </TabBarIOS>
       );
@@ -127,11 +136,47 @@ class AppContainer extends Component {
           }
         />
 
-        <ScrollView tabLabel="ios-search" style={styles.tabView}>
-          <View style={styles.card}>
-            <Text>Tab 2(android)</Text>
-          </View>
-        </ScrollView>
+        <Navigator
+          tabLabel="ios-search"
+          style={{ flex: 1 }}
+          initialRoute={{ title: 'Search', index: 0 }}
+          renderScene={this.renderScene}
+          navigationBar={
+            <Navigator.NavigationBar
+              style={{
+                backgroundColor: '#FFFFFF',
+                flex: 1,
+                flexDirection: 'row'
+              }}
+              routeMapper={{
+                LeftButton: () => {},
+                RightButton: () => {},
+                Title: (route) => {
+                  return (
+                    <View
+                      style={{
+                        flex: 3,
+                        justifyContent: 'center',
+                        alignSelf: 'center',
+                        marginLeft: -60
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 20,
+                          fontWeight: '900',
+                          color: 'rgb(59,89,152)'
+                        }}
+                      >
+                        {route.title}
+                      </Text>
+                    </View>
+                  );
+                },
+              }}
+            />
+          }
+        />
       </ScrollableTabView>
     );
   }
