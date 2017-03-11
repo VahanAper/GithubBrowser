@@ -12,6 +12,13 @@ class Search extends Component {
 
   onSearchPressed() {
     console.log('Attempting to search for ', this.state.searchQuery);
+    this.props.navigator.push({
+      title: 'Search Results',
+      index: 1,
+      passProps: {
+        searchQuery: this.state.searchQuery
+      }
+    });
   }
 
   render() {

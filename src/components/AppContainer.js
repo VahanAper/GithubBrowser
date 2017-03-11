@@ -15,6 +15,7 @@ import FacebookTabBar from './FacebookTabBar';
 import Feed from './Feed';
 import PushPayload from './PushPayload';
 import Search from './Search';
+import SearchResults from './SearchResults';
 
 class AppContainer extends Component {
   state = { selectedTab: 'feed' };
@@ -28,6 +29,9 @@ class AppContainer extends Component {
      }
      if (route.title === 'Search') {
        return <Search navigator={navigator} />;
+     }
+     if (route.title === 'Search Results') {
+       return <SearchResults navigator={navigator} {...route.passProps} />;
      }
   }
 
@@ -149,7 +153,26 @@ class AppContainer extends Component {
                 flexDirection: 'row'
               }}
               routeMapper={{
-                LeftButton: () => {},
+                LeftButton: (route, navigator) => {
+                  if (route.index === 0) {
+                    return null;
+                  }
+                  if (route.index === 1) {
+                    return (
+                      <TouchableOpacity
+                        style={{
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          flex: 1,
+                          marginLeft: 10
+                        }}
+                        onPress={() => navigator.pop()}
+                      >
+                        <Icon name="ios-arrow-back" size={30} color="rgb(59,89,152)" />
+                      </TouchableOpacity>
+                    );
+                  }
+                },
                 RightButton: () => {},
                 Title: (route) => {
                   return (
