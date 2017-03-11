@@ -47,7 +47,6 @@ class SearchResults extends Component {
   }
 
   renderRow(rowData) {
-    console.log(rowData);
     return (
       <View
         style={{
